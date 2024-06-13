@@ -1,6 +1,9 @@
 let userScore = 0;
 let compScore = 0;
 const choices = document.querySelectorAll(".choice");
+let msg = document.querySelector("#msg");
+let uscore = document.querySelector("#yourscore");
+let cscore = document.querySelector("#computerscore");
 
 const genComputerChoice = () => {
     const options = ["rock", "paper", "scissors"];
@@ -8,31 +11,51 @@ const genComputerChoice = () => {
     return options[randix];
 }
 
+const win = (userWin, userChoice, compChoice) => {
+    if(userWin) {
+        msg.innerText = `You win! ${userChoice} beats ${compChoice}`;
+        msg.style.backgroundColor = "Green";
+        userScore++;
+        uscore.innerText = userScore;
+
+
+        
+    } else {
+        console.log("Computer wins");
+        msg.innerText = `Computer wins! ${compChoice} beats ${userChoice}`;
+        msg.style.backgroundColor = "Red";
+        compScore++;
+        cscore.innerText = compScore;
+        
+    }
+}
+
 const drawGame = () => {
-    console.log("game was a draw");
+    msg.innerText = "It was a draw!";
 }
 
 const playGame = (userChoice) => {
-    console.log("user choice = ", userChoice);
     const compChoice = genComputerChoice();
-    console.log("comp choice = ", compChoice);
-    let userWin=true;
 
     if(userChoice === compChoice) {
         drawGame();
-    } else if (userChoice === "paper") {
+    } else {
+        let userWin=true;
+      if (userChoice === "paper") {
         userWin = (compChoice == "scissors") ? false:true;
     } else if (userChoice === "rock") {
         userWin = (compChoice == "paper") ? false:true;
     } else {
         userWin = (compChoice == "rock") ? false:true;
     }
+    win(userWin, compChoice, userChoice);
+}
 }; 
 
 choices.forEach((choice) => {
     console.log(choice);
     choice.addEventListener("click", () => {
         const userchoice = choice.getAttribute("id");
-        console.log("choice was clicked", userchoice);
+        playGame(userchoice);
     });
 });
